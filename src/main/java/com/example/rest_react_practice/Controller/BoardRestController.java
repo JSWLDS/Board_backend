@@ -5,6 +5,7 @@ import com.example.rest_react_practice.Service.BoardService;
 import com.example.rest_react_practice.dto.Board_posts_dto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,12 @@ public class BoardRestController {
     public List<Board_posts> getAllBoards() {
 
         return boardService.getAllBoard();
+    }
+
+    @GetMapping("/board/{id}")
+    public ResponseEntity<Board_posts> getOneBoards(@PathVariable Integer id) {
+
+        return boardService.getSearchBoard(id);
     }
 
     @PostMapping("/board")
