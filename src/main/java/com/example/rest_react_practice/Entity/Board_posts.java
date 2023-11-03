@@ -24,7 +24,7 @@ public class Board_posts {
     private Long id;
 
     @Column(name = "type")
-    private String type;
+    private Long type;
 
     @Column(name = "title")
     private String title;
@@ -49,14 +49,14 @@ public class Board_posts {
     @ColumnDefault("0") // java영역에서 효과 없음 : java의 lombok영역에서 값의 유무를 판단하기에 not null 조건에 위배되는 것 같다.
     private Long counts = 0L; // 그래서 기본 값을 0으로 java 영역에서 주었다.
 
-//    @PrePersist
+//    @PrePersist //전에 처리
 //    public void onPrePersist() {
 //        this.createdTime = LocalDateTime.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 //        this.updatedTime = this.createdTime;
 //
 //    }
 //
-//    @PreUpdate
+//    @PreUpdate // 업데이트 후 처리
 //    public void onPreUpdate(){
 //        this.updatedTime = LocalDateTime.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 //    }

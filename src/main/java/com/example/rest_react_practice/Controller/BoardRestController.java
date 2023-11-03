@@ -29,7 +29,6 @@ public class BoardRestController {
 
     @GetMapping("/board/{id}")
     public ResponseEntity<Board_posts> getOneBoards(@PathVariable Integer id) {
-
         return boardService.getSearchBoard(id);
     }
 
