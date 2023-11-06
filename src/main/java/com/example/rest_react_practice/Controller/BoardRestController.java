@@ -37,4 +37,10 @@ public class BoardRestController {
         return boardService.createBoard(board);
 
     }
+    @PatchMapping("/board/{id}")
+    public void updateCount(@PathVariable Integer id){
+        String message =  boardService.updateCount(id);
+        System.out.println(message);
+
+    }
 }

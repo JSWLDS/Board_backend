@@ -21,7 +21,8 @@ public class Board_posts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "board_id")
+    private Long boardId;
 
     @Column(name = "type")
     private Long type;
@@ -33,14 +34,13 @@ public class Board_posts {
     private String contents;
 
     @Column(name = "member_id")
-    private Integer memberNo;
+    private Integer member_id;
 
     @CreationTimestamp
     @Column(name = "created_date_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime  createdTime;
 
-    @UpdateTimestamp
     @Column(name = "updated_date_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedTime;

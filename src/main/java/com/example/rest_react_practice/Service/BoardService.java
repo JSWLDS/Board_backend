@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,5 +26,15 @@ public class BoardService {
     public ResponseEntity<Board_posts> getSearchBoard(Integer id) {
         Board_posts board_posts = boardRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Not exits Board Data by no : ["+ id +"]"));
         return ResponseEntity.ok(board_posts);
+    }
+    
+    //조회수 증가
+    public String updateCount(Integer id) {
+        Board_posts board_posts = getSearchBoard(id).getBody(); // 조회수를 증가시킬 게시글을 찾아서 객체로 저장.
+        long newCount = board_posts.getCounts()+1; // 찾은 객체의 조회수를 1높인 수를 저장.
+        board_posts.setCounts(newCount); // 1 높인 조회수를 찾은 객체 조회수에 저장.
+
+        boardRepository.save(board_posts); // 조회수가 업데이트된 객체를 저장(덮어쓰기)
+        return "update count successful";
     }
 }
