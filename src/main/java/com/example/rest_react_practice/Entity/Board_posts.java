@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-@Table(name = "Board_posts")
+@Table(name = "board_posts")
 @DynamicInsert
 @DynamicUpdate
 @Data
@@ -34,13 +34,15 @@ public class Board_posts {
     private String contents;
 
     @Column(name = "member_id")
-    private Integer member_id;
+    private Long memberId;
 
     @CreationTimestamp
     @Column(name = "created_date_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime  createdTime;
 
+
+    @CreationTimestamp
     @Column(name = "updated_date_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedTime;

@@ -23,14 +23,14 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    public ResponseEntity<Board_posts> getSearchBoard(Integer id) {
-        Board_posts board_posts = boardRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Not exits Board Data by no : ["+ id +"]"));
+    public ResponseEntity<Board_posts> getSearchBoard(Integer boardId) {
+        Board_posts board_posts = boardRepository.findById(boardId).orElseThrow(()-> new ResourceNotFoundException("Not exits Board Data by no : ["+ boardId +"]"));
         return ResponseEntity.ok(board_posts);
     }
     
     //조회수 증가
-    public String updateCount(Integer id) {
-        Board_posts board_posts = getSearchBoard(id).getBody(); // 조회수를 증가시킬 게시글을 찾아서 객체로 저장.
+    public String updateCount(Integer boardId) {
+        Board_posts board_posts = getSearchBoard(boardId).getBody(); // 조회수를 증가시킬 게시글을 찾아서 객체로 저장.
         long newCount = board_posts.getCounts()+1; // 찾은 객체의 조회수를 1높인 수를 저장.
         board_posts.setCounts(newCount); // 1 높인 조회수를 찾은 객체 조회수에 저장.
 

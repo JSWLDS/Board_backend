@@ -14,32 +14,32 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/board")
 public class BoardRestController {
 
 
     @Autowired
     private BoardService boardService;
 
-    @GetMapping("/board")
+    @GetMapping("/")
     public List<Board_posts> getAllBoards() {
 
         return boardService.getAllBoard();
     }
 
-    @GetMapping("/board/{id}")
-    public ResponseEntity<Board_posts> getOneBoards(@PathVariable Integer id) {
-        return boardService.getSearchBoard(id);
+    @GetMapping("/{boardId}")
+    public ResponseEntity<Board_posts> getOneBoards(@PathVariable Integer boardId) {
+        return boardService.getSearchBoard(boardId);
     }
 
-    @PostMapping("/board")
+    @PostMapping("/")
     public Board_posts createBoard(@RequestBody Board_posts board) {
         return boardService.createBoard(board);
 
     }
-    @PatchMapping("/board/{id}")
-    public void updateCount(@PathVariable Integer id){
-        String message =  boardService.updateCount(id);
+    @PatchMapping("/{boardId}")
+    public void updateCount(@PathVariable Integer boardId){
+        String message =  boardService.updateCount(boardId);
         System.out.println(message);
 
     }
