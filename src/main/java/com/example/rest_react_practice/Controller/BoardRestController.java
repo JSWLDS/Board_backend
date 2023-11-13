@@ -13,8 +13,8 @@ import java.util.List;
 
 
 // 원래는 이 어노테이션으로 react origin을 허용하였으나 작동되지 않아 front의 proxy 기능을 이용하여 8080포트로 변환하여 요청하게되어 deprected(더 이상 사용하지 않음)
-// 사용 안하는 줄 알았으나 게시글 자세히 보기를 누를 때 에러가 나는 것이 확인 됨. 이 어노테이션을 부여하여 문제를 해결함.
-// 아마 내보낼 때 필요한게 아닐까..
+// spring security 버전때문에 적용이 안되었던 걸로 추정. configue를 설정하거나 밑의 @CrossOrigin 어노테이션 둘 중 하나만 써도 작동함.
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
