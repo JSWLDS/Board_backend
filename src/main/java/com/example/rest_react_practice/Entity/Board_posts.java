@@ -33,18 +33,18 @@ public class Board_posts {
     @Column(name = "contents", columnDefinition = "TEXT", nullable = false)
     private String contents;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @CreationTimestamp
     @Column(name = "created_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime  createdTime;
 
 
     @CreationTimestamp
     @Column(name = "updated_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime updatedTime;
 
     @Column(columnDefinition = "bigint default 0", nullable = false, name = "counts")
