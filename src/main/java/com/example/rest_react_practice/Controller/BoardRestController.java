@@ -1,8 +1,8 @@
 package com.example.rest_react_practice.Controller;
 
-import com.example.rest_react_practice.Entity.Board_posts;
+import com.example.rest_react_practice.Entity.BoardPosts;
 import com.example.rest_react_practice.Service.BoardService;
-import com.example.rest_react_practice.dto.Board_posts_dto;
+import com.example.rest_react_practice.dto.BoardPostsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,18 +31,26 @@ public class BoardRestController {
 
 
     @GetMapping("/board")
-    public List<Board_posts> getAllBoards() {
+    public List<BoardPosts> getAllBoard() {
 
-        return boardService.getAllBoard();
+        return boardService.getAllBoards();
+    }
+
+
+    @GetMapping("/board/type/{typeNo}")
+    public List<BoardPostsDto> getAllTypeBoards(@PathVariable Long typeNo) {
+
+        return boardService.getAllTypeBoards(typeNo);
     }
 
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<Board_posts> getOneBoards(@PathVariable Integer boardId) {
+    public ResponseEntity<BoardPosts> getOneBoards(@PathVariable Integer boardId) {
+
         return boardService.getSearchBoard(boardId);
     }
 
     @PostMapping("/board")
-    public Board_posts createBoard(@RequestBody Board_posts board) {
+    public BoardPosts createBoard(@RequestBody BoardPosts board) {
         return boardService.createBoard(board);
 
     }

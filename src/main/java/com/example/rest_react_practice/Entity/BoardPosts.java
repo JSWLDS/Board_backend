@@ -3,21 +3,21 @@ package com.example.rest_react_practice.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 @Entity
 @Table(name = "board_posts")
 @DynamicInsert
 @DynamicUpdate
+@RequiredArgsConstructor
 @Data
-public class Board_posts {
+public class BoardPosts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Board_posts {
     private Long boardId;
 
     @Column(name = "type")
-    private Long type;
+    private Long typeNo;
 
     @Column(name = "title")
     private String title;
@@ -38,18 +38,19 @@ public class Board_posts {
 
     @CreationTimestamp
     @Column(name = "created_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime  createdTime;
 
 
     @CreationTimestamp
     @Column(name = "updated_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime updatedTime;
 
     @Column(columnDefinition = "bigint default 0", nullable = false, name = "counts")
     @ColumnDefault("0") // java영역에서 효과 없음 : java의 lombok영역에서 값의 유무를 판단하기에 not null 조건에 위배되는 것 같다.
     private Long counts = 0L; // 그래서 기본 값을 0으로 java 영역에서 주었다.
+
 
 //    @PrePersist //전에 처리
 //    public void onPrePersist() {
