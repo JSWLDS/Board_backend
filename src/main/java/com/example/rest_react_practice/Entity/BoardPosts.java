@@ -24,7 +24,7 @@ public class BoardPosts {
     @Column(name = "board_id")
     private Long boardId;
 
-    @Column(name = "type_number")
+    @Column(name = "type_nu mber")
     private Long typeNo;
 
     @Column(name = "title")
