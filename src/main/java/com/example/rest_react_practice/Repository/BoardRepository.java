@@ -10,7 +10,10 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<BoardPosts, Integer> {
 
-    @Query("SELECT b FROM BoardPosts b WHERE b.typeNo    = :typeNo")
+    @Query("SELECT b FROM BoardPosts b WHERE b.typeNo = :typeNo ORDER BY b.boardId DESC")
     List<BoardPosts> findByType(@Param("typeNo") Long typeNo);
+
+    @Query("SELECT b FROM BoardPosts b ORDER BY b.boardId DESC ")
+    List<BoardPosts> findAllBoards();
 
 }

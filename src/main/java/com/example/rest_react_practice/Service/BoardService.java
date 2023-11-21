@@ -20,7 +20,7 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     public List<BoardPosts> getAllBoards() {
-        return boardRepository.findAll();
+        return boardRepository.findAllBoards();
     }
 
     public List<BoardPostsDto> getAllTypeBoards(Long typeNo) {
