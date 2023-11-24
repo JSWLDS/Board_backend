@@ -1,6 +1,8 @@
 package com.example.rest_react_practice.Token;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import static java.security.KeyRep.Type.SECRET;
 
 @RequiredArgsConstructor
 @Component
@@ -30,21 +36,19 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // 토큰 생성
-    public String createToken(String userPk, List<String> roles) {  // userPK = email
-        ClaimsBuilder claimsBuilder = Jwts.claims();
-        claimsBuilder.subject(userPk);
-        claimsBuilder.setExpiration(new Date(System.currentTimeMillis() + 3600000));
-
-        Claims claims = claimsBuilder.build();
-
-        String jwtToken = Jwts.builder()
+    // 토큰 생성'
+    // ClaimsBuilder 클래스 기능이라는게 존재함 0.12.3 v에서 
+    private String createToken(Map<String, Object> claims, String userName) {
+        return Jwts.builder()
                 .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-
-
-        return jwtToken;
+                .setSubject(userName)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+    }
+    private Key getSignKey() {
+        byte[] keyBytes= Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     // 인증 정보 조회
@@ -57,7 +61,7 @@ public class JwtTokenProvider {
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().set(secretKey).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return claims.getBody().getSubject();
         } catch (JwtException e) {
             // 예외 처리 로직 추가
