@@ -22,12 +22,7 @@ import java.util.List;
 public class BoardRestController {
 
 
-    private BoardService boardService;
-
-    @Autowired
-    public BoardRestController(BoardService boardService) {
-        this.boardService = boardService;
-    }
+    private final BoardService boardService;
 
 
     @GetMapping("/board")

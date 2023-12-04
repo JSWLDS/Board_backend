@@ -30,7 +30,7 @@ public class BoardService {
         // BoardPosts를 BoardPostsDto로 변환
         List<BoardPostsDto> boardPostsDtos = boardPosts.stream()
                 .map(boardPostsEntity -> {
-                    return BoardPostsDto.builder()
+                    return (BoardPostsDto.builder()
                             .boardId(boardPostsEntity.getBoardId())
                             .typeNo(boardPostsEntity.getTypeNo())
                             .title(boardPostsEntity.getTitle())
@@ -39,7 +39,7 @@ public class BoardService {
                             .createdTime(boardPostsEntity.getCreatedTime())
                             .updatedTime(boardPostsEntity.getUpdatedTime())
                             .counts(boardPostsEntity.getCounts())
-                            .build();
+                            .build());
                 })
                 .collect(Collectors.toList());
         return boardPostsDtos;
