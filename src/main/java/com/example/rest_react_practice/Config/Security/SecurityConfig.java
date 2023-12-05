@@ -30,6 +30,7 @@ public class SecurityConfig {
         return http.cors().and().csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
 
                         .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasAuthority("ADMIN")

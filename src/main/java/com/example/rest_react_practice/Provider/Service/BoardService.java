@@ -1,4 +1,4 @@
-package com.example.rest_react_practice.Service;
+package com.example.rest_react_practice.Provider.Service;
 
 import com.example.rest_react_practice.Entity.BoardPosts;
 import com.example.rest_react_practice.Repository.BoardRepository;
