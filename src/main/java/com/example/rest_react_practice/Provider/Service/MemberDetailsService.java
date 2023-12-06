@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public class MemberDetailsService implements UserDetailsService {
 
-    private MemberDetailRepository repository;
+    private MemberDetailRepository memberDetailRepository;
 
 
     private PasswordEncoder encoder;
@@ -29,13 +29,13 @@ public class MemberDetailsService implements UserDetailsService {
 
     @Autowired
     public MemberDetailsService(MemberDetailRepository repository, PasswordEncoder encoder) {
-        this.repository = repository;
+        this.memberDetailRepository = repository;
         this.encoder = encoder;
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Member> userDetail = repository.findMemberByUsername(username);
+        Optional<Member> userDetail = memberDetailRepository.findMemberByUsername(username);
 
         // Converting userDetail to UserDetails
         return userDetail.map(MemberDetailsImpl::new)
@@ -43,11 +43,30 @@ public class MemberDetailsService implements UserDetailsService {
     }
 
     public String addUser(Member userInfo) {
+        String username = userInfo.getUsername();
+
+        // 중복된 사용자 ID 체크
+        Optional<Member> found = memberDetailRepository.findMemberByUsername(username);
+        if (found.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자 ID가 존재합니다.");
+        }
+
+        // 비밀번호가 null이면 예외 처리 또는 기본값 설정
+        if (userInfo.getPassword() == null) {
+            // 여기서는 예외를 던지도록 했지만, 실제로는 상황에 따라 다르게 처리 가능
+            throw new IllegalArgumentException("비밀번호는 null일 수 없습니다.");
+        }
+
+        // 비밀번호 해시화
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         System.out.println(userInfo.getPassword());
-        repository.save(userInfo);
+
+        // 저장
+        memberDetailRepository.save(userInfo);
+
         return "User Added Successfully";
     }
+
 
 
 }

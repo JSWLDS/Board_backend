@@ -1,15 +1,18 @@
 package com.example.rest_react_practice.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Member {
 
     @Id
@@ -29,8 +32,19 @@ public class Member {
     @Column(name = "password")
     private String password;
 
+    @CreationTimestamp
+    @Column(name = "created_date_time")
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+    private LocalDateTime createdTime;
 
-    @Column(nullable = false, name = "role")
+
+    @CreationTimestamp
+    @Column(name = "updated_date_time")
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+    private LocalDateTime updatedTime;
+
+
+    @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 

@@ -12,10 +12,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
+@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
-public class MemberController {
+public class MemberRestController {
 
     private MemberDetailsService memberDetailsService;
 
@@ -30,6 +34,7 @@ public class MemberController {
 
     @PostMapping("/addNewUser")
     public String addNewUser(@RequestBody Member userInfo) {
+        System.out.println("success adNewUSer");
         return memberDetailsService.addUser(userInfo);
     }
 

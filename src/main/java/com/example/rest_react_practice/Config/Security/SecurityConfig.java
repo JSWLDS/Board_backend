@@ -32,8 +32,8 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
 
-                        .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasAuthority("ADMIN")
+//                        .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
+//                        .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasAuthority("ADMIN")
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -52,7 +52,7 @@ public class SecurityConfig {
         config.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/v1/**", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 
