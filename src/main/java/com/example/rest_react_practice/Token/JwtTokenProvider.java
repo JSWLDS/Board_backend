@@ -37,7 +37,7 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성'
-    // ClaimsBuilder 클래스 기능이라는게 존재함 0.12.3 v에서
+    // ClaimsBuilder 클래스 기능 이라는 게 존재함 0.12.3 v에서
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
                 .setClaims(claims)

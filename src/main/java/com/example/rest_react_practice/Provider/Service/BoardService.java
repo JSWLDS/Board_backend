@@ -44,6 +44,7 @@ public class BoardService {
                 .collect(Collectors.toList());
         return boardPostsDtos;
     }
+    
     public BoardPosts createBoard(BoardPosts board) {
         return boardRepository.save(board);
     }

@@ -27,11 +27,6 @@ public class MemberRestController {
 
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
     @PostMapping("/addNewUser")
     public String addNewUser(@RequestBody Member userInfo) {
         System.out.println("success adNewUSer");

@@ -20,16 +20,16 @@ public class Member {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @CreationTimestamp
@@ -44,7 +44,7 @@ public class Member {
     private LocalDateTime updatedTime;
 
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
