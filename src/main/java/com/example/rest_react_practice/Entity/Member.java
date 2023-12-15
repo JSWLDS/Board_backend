@@ -20,7 +20,8 @@ public class Member {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname", nullable = false
+    )
     private String nickname;
 
     @Column(name = "username", nullable = false)
