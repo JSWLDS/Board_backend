@@ -66,9 +66,9 @@ public class SecurityConfig {
 
 
 
-    // 설정 요소들을 설정하고 관리하는 객체인 manager를 생성한다.
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+        // 설정 요소들을 설정하고 관리하는 객체인 manager를 생성한다.
+        @Bean
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+            return config.getAuthenticationManager();
+        }
 }
