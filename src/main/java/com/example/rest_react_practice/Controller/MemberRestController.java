@@ -21,7 +21,7 @@ public class MemberRestController {
 
     private MemberDetailsServiceImpl memberDetailsServiceImpl;
 
-    private JwtAuthenticationProvider jwtAuthProvider;
+
 
     private AuthenticationManager authenticationManager;
 
@@ -31,13 +31,20 @@ public class MemberRestController {
         return memberDetailsServiceImpl.addUser(userInfo);
     }
 
-    @PostMapping("/generateToken")
+    @PostMapping("/login")
     public String authenticateAndGetToken(@RequestBody MemberDto memberDto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(memberDto.getUsername(), memberDto.getPassword()));
-        if (authentication.isAuthenticated()) {
-            return jwtAuthProvider.generateToken(memberDto.getUsername());
-        } else {
-            throw new UsernameNotFoundException("invalid user request !");
+//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(memberDto.getUsername(), memberDto.getPassword()));
+//        if (authentication.isAuthenticated()) {
+//            return jwtAuthProvider.generateToken(memberDto.getUsername());
+//        } else {
+//            throw new UsernameNotFoundException("invalid user request !");
+//        }
+        String username = memberDto.getUsername();
+        String password = memberDto.getPassword();
+        try {
+            return memberDetailsServiceImpl.login(username, password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

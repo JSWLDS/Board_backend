@@ -1,5 +1,6 @@
 package com.example.rest_react_practice.Provider;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -38,6 +39,7 @@ public class JwtAuthenticationProvider {
 
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
+                .setHeaderParam("typ", "JWT")
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -64,6 +66,7 @@ public class JwtAuthenticationProvider {
         return claimsResolver.apply(claims);
     }
 
+
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
@@ -75,11 +78,6 @@ public class JwtAuthenticationProvider {
 
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
-    }
-
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
 

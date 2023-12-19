@@ -1,14 +1,17 @@
 package com.example.rest_react_practice.Provider.Service;
 
+import com.example.rest_react_practice.Config.Configure.PasswordEncoderConfig;
 import com.example.rest_react_practice.Entity.Member;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Repository.MemberDetailRepository;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +19,16 @@ import java.util.Optional;
 
 
 @Transactional
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class MemberDetailsServiceImpl implements UserDetailsService {
 
-    private MemberDetailRepository memberDetailRepository;
+    private final MemberDetailRepository memberDetailRepository;
 
-    private JwtAuthenticationProvider JwtAuthenticationProvider;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-    private PasswordEncoder encoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-
-    @Autowired
-    public MemberDetailsServiceImpl(MemberDetailRepository repository, com.example.rest_react_practice.Provider.JwtAuthenticationProvider jwtAuthenticationProvider, PasswordEncoder encoder) {
-        this.memberDetailRepository = repository;
-        JwtAuthenticationProvider = jwtAuthenticationProvider;
-        this.encoder = encoder;
-    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -59,7 +55,7 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
         }
 
         // 비밀번호 해시화
-        userInfo.setPassword(encoder.encode(userInfo.getPassword()));
+        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         System.out.println(userInfo.getPassword());
 
         // 저장
@@ -68,6 +64,20 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
         return "User Added Successfully";
     }
 
+    public String login(String username, String password) throws Exception {
+        Optional<Member> found = memberDetailRepository.findMemberByUsername(username);
+        MemberDetailsImpl memberDetails = found.map(MemberDetailsImpl::new)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found " + username));
+        if(!passwordEncoder.matches(password, memberDetails.getPassword())){
+
+            throw new UsernameNotFoundException("Invalid password for user " + username);
+
+        }else {
+
+            return jwtAuthenticationProvider.generateToken(username);
+        }
+
+    }
 
 
 }
