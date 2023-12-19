@@ -1,11 +1,10 @@
 package com.example.rest_react_practice.Provider.Service;
 
 import com.example.rest_react_practice.Entity.Member;
-import com.example.rest_react_practice.Repository.BoardRepository;
+import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Repository.MemberDetailRepository;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,17 +18,19 @@ import java.util.Optional;
 @Transactional
 @NoArgsConstructor
 @Service
-public class MemberDetailsService implements UserDetailsService {
+public class MemberDetailsServiceImpl implements UserDetailsService {
 
     private MemberDetailRepository memberDetailRepository;
 
+    private JwtAuthenticationProvider JwtAuthenticationProvider;
 
     private PasswordEncoder encoder;
 
 
     @Autowired
-    public MemberDetailsService(MemberDetailRepository repository, PasswordEncoder encoder) {
+    public MemberDetailsServiceImpl(MemberDetailRepository repository, com.example.rest_react_practice.Provider.JwtAuthenticationProvider jwtAuthenticationProvider, PasswordEncoder encoder) {
         this.memberDetailRepository = repository;
+        JwtAuthenticationProvider = jwtAuthenticationProvider;
         this.encoder = encoder;
     }
     @Override

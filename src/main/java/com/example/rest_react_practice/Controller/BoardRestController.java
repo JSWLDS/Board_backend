@@ -2,10 +2,10 @@ package com.example.rest_react_practice.Controller;
 
 import com.example.rest_react_practice.Entity.BoardPosts;
 import com.example.rest_react_practice.Entity.Member;
-import com.example.rest_react_practice.Provider.JwtProvider;
+import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Provider.Service.BoardService;
-import com.example.rest_react_practice.Provider.Service.MemberDetailsService;
-import com.example.rest_react_practice.dto.AuthRequestDto;
+import com.example.rest_react_practice.Provider.Service.MemberDetailsServiceImpl;
+import com.example.rest_react_practice.dto.MemberDto;
 import com.example.rest_react_practice.dto.BoardPostsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +32,9 @@ public class BoardRestController {
 
     private final BoardService boardService;
 
-    private MemberDetailsService memberDetailsService;
+    private MemberDetailsServiceImpl memberDetailsServiceImpl;
 
-    private JwtProvider jwtService;
+    private JwtAuthenticationProvider jwtService;
 
     private AuthenticationManager authenticationManager;
 
@@ -45,7 +45,7 @@ public class BoardRestController {
 
     @PostMapping("/addNewUser")
     public String addNewUser(@RequestBody Member userInfo) {
-        return memberDetailsService.addUser(userInfo);
+        return memberDetailsServiceImpl.addUser(userInfo);
     }
 
     @GetMapping("/user/userProfile")
@@ -61,7 +61,7 @@ public class BoardRestController {
     }
 
     @PostMapping("/generateToken")
-    public String authenticateAndGetToken(@RequestBody AuthRequestDto authRequest) {
+    public String authenticateAndGetToken(@RequestBody MemberDto authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getUsername());

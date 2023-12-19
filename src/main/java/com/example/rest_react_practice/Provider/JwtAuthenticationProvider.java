@@ -14,9 +14,23 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtProvider {
+public class JwtAuthenticationProvider {
 
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+
+    private static final int VALID_DAY = 3;
+    private static final int SEC = 1;
+    private static final int MINUTE = 60 * SEC;
+    private static final int HOUR = 60 * MINUTE;
+    private static final int DAY = 24 * HOUR;
+
+    // JWT 토큰의 유효기간: 3일 (단위: seconds)
+    private static final int JWT_TOKEN_VALID_SEC = VALID_DAY * DAY;
+    // JWT 토큰의 유효기간: 3일 (단위: milliseconds)
+    private static final int JWT_TOKEN_VALID_MILLI_SEC = JWT_TOKEN_VALID_SEC * 1000;
+
+
+
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName);
@@ -27,7 +41,7 @@ public class JwtProvider {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
