@@ -4,6 +4,8 @@ import com.example.rest_react_practice.Config.Configure.PasswordEncoderConfig;
 import com.example.rest_react_practice.Entity.Member;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Repository.MemberDetailRepository;
+import com.example.rest_react_practice.dto.MemberAuthorityDto;
+import com.example.rest_react_practice.dto.MemberDto;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +70,7 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
         return "User Added Successfully";
     }
 
+    @Transactional
     public String login(String username, String password) throws Exception {
         Optional<Member> found = memberDetailRepository.findMemberByUsername(username);
         MemberDetailsImpl memberDetails = found.map(MemberDetailsImpl::new)
@@ -77,8 +80,13 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Invalid password for user " + username);
 
         }else {
-            Collection<? extends GrantedAuthority> roles =  memberDetails.getAuthorities();
-            return jwtAuthenticationProvider.generateToken(memberDetails.getUsername(), roles);
+            Member member = found.get();
+            MemberAuthorityDto memberAuthorityDto = MemberAuthorityDto.builder()
+                    .username(member.getUsername())
+                    .role(member.getRole())
+                    .build();
+
+            return jwtAuthenticationProvider.generateToken(memberAuthorityDto.getUsername(), memberAuthorityDto.getRole());
         }
 
     }

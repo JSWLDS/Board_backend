@@ -42,7 +42,11 @@ public class MemberRestController {
         String username = memberDto.getUsername();
         String password = memberDto.getPassword();
         try {
-            return memberDetailsServiceImpl.login(username, password);
+            String jwt = memberDetailsServiceImpl.login(username, password);
+            
+            System.out.println(jwt+"-----------------------------------jwt임");
+            
+            return jwt;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

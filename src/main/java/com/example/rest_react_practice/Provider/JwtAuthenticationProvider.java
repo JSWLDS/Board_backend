@@ -1,10 +1,10 @@
 package com.example.rest_react_practice.Provider;
+import com.example.rest_react_practice.Entity.UserRoleEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -29,16 +29,16 @@ public class JwtAuthenticationProvider {
 
 
 
-    public String generateToken(String username, Collection<? extends GrantedAuthority> roles) {
+    public String generateToken(String username, UserRoleEnum role) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username, roles);
+        return createToken(claims, username, role);
     }
 
-    private String createToken(Map<String, Object> claims, String username, Collection<? extends GrantedAuthority> roles) {
+    private String createToken(Map<String, Object> claims, String username, UserRoleEnum role) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setClaims(claims)
-                .claim("authorities", roles.toArray()   )
+                .claim("authorities", role)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
