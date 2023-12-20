@@ -1,5 +1,4 @@
 package com.example.rest_react_practice.Provider;
-import com.example.rest_react_practice.Entity.UserRoleEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,16 +28,16 @@ public class JwtAuthenticationProvider {
 
 
 
-    public String generateToken(String username, UserRoleEnum role) {
+    public String generateToken(String username, String[] roles) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username, role);
+        return createToken(claims, username, roles);
     }
 
-    private String createToken(Map<String, Object> claims, String username, UserRoleEnum role) {
+    private String createToken(Map<String, Object> claims, String username, String[] roles) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setClaims(claims)
-                .claim("authorities", role)
+                .claim("authorities", roles)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))

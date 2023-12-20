@@ -46,7 +46,6 @@ public class Member {
 
 
     @Column(name = "role", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role;
+    private String roles;
 
 }

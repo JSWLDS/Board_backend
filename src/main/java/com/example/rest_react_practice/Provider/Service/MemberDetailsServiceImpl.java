@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,12 +82,13 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
 
         }else {
             Member member = found.get();
+            String [] roles = member.getRoles().split(",");
             MemberAuthorityDto memberAuthorityDto = MemberAuthorityDto.builder()
                     .username(member.getUsername())
-                    .role(member.getRole())
+                    .roles(roles)
                     .build();
 
-            return jwtAuthenticationProvider.generateToken(memberAuthorityDto.getUsername(), memberAuthorityDto.getRole());
+            return jwtAuthenticationProvider.generateToken(memberAuthorityDto.getUsername(), memberAuthorityDto.getRoles());
         }
 
     }

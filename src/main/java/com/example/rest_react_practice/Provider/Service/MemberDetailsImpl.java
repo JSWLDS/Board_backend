@@ -8,7 +8,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -52,14 +55,16 @@ public class MemberDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        UserRoleEnum role = member.getRole();
-        String authority = role.getAuthority();
+        String roles = member.getRoles();
 
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+        List<SimpleGrantedAuthority> rolesArray = Arrays.stream(roles.split(","))
+                .map(SimpleGrantedAuthority :: new)
+                .collect(Collectors.toList());
+
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        authorities.add(simpleGrantedAuthority);
+        authorities.add((GrantedAuthority) rolesArray);
 
         return authorities;
     }

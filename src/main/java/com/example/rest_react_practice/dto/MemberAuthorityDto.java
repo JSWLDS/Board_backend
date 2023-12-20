@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -15,6 +17,5 @@ public class MemberAuthorityDto {
 
     String username;
 
-    @Enumerated(value = EnumType.STRING)
-    UserRoleEnum role;
+    String [] roles;
 }
