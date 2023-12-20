@@ -4,6 +4,7 @@ import com.example.rest_react_practice.Entity.BoardPosts;
 import com.example.rest_react_practice.Entity.Member;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Provider.Service.BoardService;
+import com.example.rest_react_practice.Provider.Service.MemberDetailsImpl;
 import com.example.rest_react_practice.Provider.Service.MemberDetailsServiceImpl;
 import com.example.rest_react_practice.dto.MemberDto;
 import com.example.rest_react_practice.dto.BoardPostsDto;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +34,11 @@ public class BoardRestController {
 
     private final BoardService boardService;
 
-    private MemberDetailsServiceImpl memberDetailsServiceImpl;
+    private final MemberDetailsServiceImpl memberDetailsServiceImpl;
 
-    private JwtAuthenticationProvider jwtService;
+    private final MemberDetailsServiceImpl memberDetailsService;
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/welcome")
     public String welcome() {
@@ -48,23 +50,32 @@ public class BoardRestController {
         return memberDetailsServiceImpl.addUser(userInfo);
     }
 
-    @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String userProfile() {
-        return "Welcome to User Profile";
-    }
+//    @GetMapping("/user/userProfile")
+//    @PreAuthorize("hasAuthority('ROLE_USER')")
+//    public String userProfile() {
+//        return "Welcome to User Profile";
+//    }
+//
+//    @GetMapping("/admin/adminProfile")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public String adminProfile() {
+//        return "Welcome to Admin Profile";
+//    }
 
-    @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String adminProfile() {
-        return "Welcome to Admin Profile";
-    }
-
-    @PostMapping("/generateToken")
+    @PostMapping("/login")
     public String authenticateAndGetToken(@RequestBody MemberDto authRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String username = authRequest.getUsername();
+        String password = authRequest.getPassword();
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, passwordEncoder.encode(password)));
+
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUsername());
+            try {
+                return memberDetailsService.login(username, password);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             throw new UsernameNotFoundException("invalid user request !");
         }
