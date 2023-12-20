@@ -1,4 +1,4 @@
-package com.example.rest_react_practice.Token;
+package com.example.rest_react_practice.Filter;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -15,10 +15,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
-import static java.security.KeyRep.Type.SECRET;
 
 @RequiredArgsConstructor
 @Component

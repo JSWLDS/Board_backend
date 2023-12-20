@@ -44,7 +44,7 @@ public class MemberRestController {
         try {
             String jwt = memberDetailsServiceImpl.login(username, password);
             
-            System.out.println(jwt+"-----------------------------------jwt임");
+            System.out.println(jwt+"-----------------------------------jwt");
             
             return jwt;
         } catch (Exception e) {

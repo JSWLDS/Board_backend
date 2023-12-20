@@ -1,15 +1,12 @@
 package com.example.rest_react_practice.Config.Security;
 
 
-import com.example.rest_react_practice.Token.JwtAuthenticationFilter;
-import com.example.rest_react_practice.Token.JwtTokenProvider;
+import com.example.rest_react_practice.Filter.JwtAuthenticationFilter;
+import com.example.rest_react_practice.Filter.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,8 +30,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors().and().csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/board/**")).authenticated()
+
 
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasAuthority("ADMIN")
