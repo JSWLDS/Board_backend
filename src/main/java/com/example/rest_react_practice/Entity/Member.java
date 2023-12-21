@@ -45,7 +45,7 @@ public class Member {
     private LocalDateTime updatedTime;
 
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "roles", nullable = false)
     private String roles;
 
 }

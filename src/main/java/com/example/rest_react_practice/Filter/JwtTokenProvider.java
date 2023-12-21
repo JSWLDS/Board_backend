@@ -21,7 +21,8 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
 
-    private String secretKey = "webfirewood";
+    private String JWT_SECRET = "webfirewood";
+
 
     private long tokenValidTime = 30 * 60 * 1000L;     // 토큰 유효시간 30분
 
@@ -30,7 +31,7 @@ public class JwtTokenProvider {
     // 객체 초기화, secretKey를 Base64로 인코딩
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
     }
 
     // 토큰 생성'
@@ -44,21 +45,16 @@ public class JwtTokenProvider {
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
     private Key getSignKey() {
-        byte[] keyBytes= Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes= Decoders.BASE64.decode(JWT_SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 인증 정보 조회
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
 
 
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
             return claims.getBody().getSubject();
         } catch (JwtException e) {
             // 예외 처리 로직 추가
@@ -69,7 +65,7 @@ public class JwtTokenProvider {
     // 토큰 유효성, 만료일자 확인
     public boolean validateToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
@@ -78,6 +74,6 @@ public class JwtTokenProvider {
 
     // Request의 Header에서 token 값 가져오기
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+        return request.getHeader("Authentication");
     }
 }
