@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +22,9 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
 
-    private String JWT_SECRET = "webfirewood";
+
+    @Value("${jwt.secret}")
+    private String JWT_SECRET;
 
 
     private long tokenValidTime = 30 * 60 * 1000L;     // 토큰 유효시간 30분
@@ -41,7 +44,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
     private Key getSignKey() {

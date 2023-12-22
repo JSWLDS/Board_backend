@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/board/**")).authenticated()
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1/board/**")).hasRole("USER")
 
 
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
