@@ -2,6 +2,7 @@ package com.example.rest_react_practice.Provider.Service;
 
 import com.example.rest_react_practice.Entity.Member;
 import com.example.rest_react_practice.Entity.UserRoleEnum;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Transactional
 @RequiredArgsConstructor
 public class MemberDetailsImpl implements UserDetails {
 

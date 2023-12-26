@@ -23,6 +23,7 @@ public class BoardService {
         return boardRepository.findAllBoards();
     }
 
+    @Transactional
     public List<BoardPostsDto> getAllTypeBoards(Long typeNo) {
 
         List<BoardPosts> boardPosts = boardRepository.findByType(typeNo);
@@ -35,7 +36,7 @@ public class BoardService {
                             .typeNo(boardPostsEntity.getTypeNo())
                             .title(boardPostsEntity.getTitle())
                             .contents(boardPostsEntity.getContents())
-                            .userId(boardPostsEntity.getUserId())
+                            .userId(boardPostsEntity.getMemberId())
                             .createdTime(boardPostsEntity.getCreatedTime())
                             .updatedTime(boardPostsEntity.getUpdatedTime())
                             .counts(boardPostsEntity.getCounts())

@@ -17,8 +17,8 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "member_id")
+    private long memberId;
 
     @Column(name = "nickname", nullable = false
     )
@@ -47,5 +47,9 @@ public class Member {
 
     @Column(name = "roles", nullable = false)
     private String roles;
+
+//    @ManyToOne
+//    @JoinColumn(name = "member_id")
+//    private BoardPosts boardPosts;
 
 }
