@@ -33,7 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/board/**")).hasRole("USER")
-
+                                .requestMatchers(new AntPathRequestMatcher("/api/v1//board/type/**")).hasRole("USER")
 
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasAuthority("ADMIN")
