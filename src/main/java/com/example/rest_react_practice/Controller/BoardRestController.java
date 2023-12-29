@@ -2,18 +2,21 @@ package com.example.rest_react_practice.Controller;
 
 import com.example.rest_react_practice.Entity.BoardPosts;
 import com.example.rest_react_practice.Entity.Member;
+import com.example.rest_react_practice.Filter.JwtTokenProvider;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Provider.Service.BoardService;
 import com.example.rest_react_practice.Provider.Service.MemberDetailsImpl;
 import com.example.rest_react_practice.Provider.Service.MemberDetailsServiceImpl;
 import com.example.rest_react_practice.dto.MemberDto;
 import com.example.rest_react_practice.dto.BoardPostsDto;
+import com.example.rest_react_practice.dto.MemberIdDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,6 +42,9 @@ public class BoardRestController {
     private final MemberDetailsServiceImpl memberDetailsService;
 
     private final AuthenticationManager authenticationManager;
+
+
+
 
     @GetMapping("/welcome")
     public String welcome() {
@@ -112,4 +118,14 @@ public class BoardRestController {
         System.out.println(message);
 
     }
+
+    @GetMapping("/board/getMemberID/{jwt}")
+    public MemberIdDto extractJwt(@PathVariable String jwt) {
+
+        return memberDetailsServiceImpl.jwtExtract(jwt);
+
+    }
+
+
+
 }

@@ -1,28 +1,20 @@
 package com.example.rest_react_practice.Provider.Service;
 
-import com.example.rest_react_practice.Config.Configure.PasswordEncoderConfig;
 import com.example.rest_react_practice.Entity.Member;
+import com.example.rest_react_practice.Filter.JwtTokenProvider;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Repository.MemberDetailRepository;
 import com.example.rest_react_practice.dto.MemberAuthorityDto;
-import com.example.rest_react_practice.dto.MemberDto;
+import com.example.rest_react_practice.dto.MemberIdDto;
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Transactional
@@ -35,6 +27,8 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     private final BCryptPasswordEncoder passwordEncoder;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,6 +64,24 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
 
         return "User Added Successfully";
     }
+
+    public MemberIdDto jwtExtract(String jwt) {
+
+        String username = jwtTokenProvider.getUserPk(jwt);
+        Optional<Member> member = memberDetailRepository.findMemberByUsername(username);
+
+        if(member.isPresent()) {
+            return null;
+        }
+
+        String nickname = member.get().getNickname();
+        long memberId = member.get().getMemberId();
+
+        return MemberIdDto.builder().memberId(memberId).nickname((nickname)).build();
+    }
+
+
+
 
     @Transactional
     public String login(String username, String password) throws Exception {
