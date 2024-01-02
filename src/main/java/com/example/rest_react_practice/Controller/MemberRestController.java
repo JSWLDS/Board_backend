@@ -1,10 +1,14 @@
 package com.example.rest_react_practice.Controller;
 
+import com.example.rest_react_practice.Entity.BoardPosts;
 import com.example.rest_react_practice.Entity.Member;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Provider.Service.MemberDetailsServiceImpl;
 import com.example.rest_react_practice.dto.MemberDto;
+import com.example.rest_react_practice.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,6 +56,45 @@ public class MemberRestController {
         }
     }
 
+
+
+    @GetMapping("/getMemberId/{jwt}")
+    public ResponseEntity<Long> extractJwt(@PathVariable String jwt) {
+        if (!memberDetailsServiceImpl.isTokenExpired(jwt)) {
+            // 토큰이 만료되지 않았을 경우에만 memberId를 추출하고 응답함.
+            Long memberId = memberDetailsServiceImpl.jwtExtractMemberId(jwt);
+            return ResponseEntity.ok(memberId);
+        } else {
+            // 토큰이 만료되었을 경우 403 Forbidden 상태로 응답함.
+            System.out.println(jwt + "---토큰 만료됨.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @GetMapping("/getNickname/{memberId}")
+    public String getBoardNickname(@PathVariable Integer memberId) {
+        String nickname = memberDetailsServiceImpl.findByIdOfNickname(memberId);
+        return nickname;
+    }
+
+
+//    @GetMapping("/getNickname/{jwt}")
+//    public ResponseEntity<String> extractJwtNickname(@PathVariable String jwt) {
+//        if (!memberDetailsServiceImpl.isTokenExpired(jwt)) {
+//            // 토큰이 만료되지 않았을 경우에만 memberId를 추출하고 응답함.
+//            String nickname = memberDetailsServiceImpl.jwtExtractNickname(jwt);
+//            return ResponseEntity.ok(nickname);
+//        } else {
+//            // 토큰이 만료되었을 경우 403 Forbidden 상태로 응답함.
+//            System.out.println(jwt + "---토큰 만료됨.");
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
+//    }
+
+    @GetMapping("/isTokenExpired/{jwt}")
+    public boolean isTokenExpired(@PathVariable String jwt) {
+       return memberDetailsServiceImpl.isTokenExpired(jwt);
+    }
 
 
 }

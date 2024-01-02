@@ -1,11 +1,10 @@
 package com.example.rest_react_practice.Provider.Service;
 
 import com.example.rest_react_practice.Entity.Member;
-import com.example.rest_react_practice.Filter.JwtTokenProvider;
 import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import com.example.rest_react_practice.Repository.MemberDetailRepository;
 import com.example.rest_react_practice.dto.MemberAuthorityDto;
-import com.example.rest_react_practice.dto.MemberIdDto;
+import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,12 +27,11 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Member> userDetail = memberDetailRepository.findMemberByUsername(username);
+        Optional<Member> userDetail = memberDetailRepository.findMemberByUsernameOpt(username);
 
         // Converting userDetail to UserDetails
         return userDetail.map(MemberDetailsImpl::new)
@@ -44,7 +42,7 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
         String username = userInfo.getUsername();
 
         // 중복된 사용자 ID 체크
-        Optional<Member> found = memberDetailRepository.findMemberByUsername(username);
+        Optional<Member> found = memberDetailRepository.findMemberByUsernameOpt(username);
         if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자 ID가 존재합니다.");
         }
@@ -65,27 +63,43 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
         return "User Added Successfully";
     }
 
-    public MemberIdDto jwtExtract(String jwt) {
+    public long jwtExtractMemberId(String jwt) {
 
-        String username = jwtTokenProvider.getUserPk(jwt);
-        Optional<Member> member = memberDetailRepository.findMemberByUsername(username);
+        String username = jwtAuthenticationProvider.extractClaim(jwt, Claims::getSubject);
+        System.out.println("---------------------------------<>" + username);
+        Member member = memberDetailRepository.findMemberByUsername(username);
 
-        if(member.isPresent()) {
-            return null;
+        long  memberId=0L;
+        if (member != null) {
+
+            memberId = member.getMemberId();
+
+
         }
+        return memberId;
 
-        String nickname = member.get().getNickname();
-        long memberId = member.get().getMemberId();
-
-        return MemberIdDto.builder().memberId(memberId).nickname((nickname)).build();
     }
 
+    public String jwtExtractNickname(String jwt) {
+
+        String username = jwtAuthenticationProvider.extractClaim(jwt, Claims::getSubject);
+        System.out.println("---------------------------------<>" + username);
+        Member member = memberDetailRepository.findMemberByUsername(username);
+
+        String nickanme = "";
+        if (member != null) {
+
+            nickanme = member.getNickname();
 
 
+        }
+        return nickanme;
+
+    }
 
     @Transactional
     public String login(String username, String password) throws Exception {
-        Optional<Member> found = memberDetailRepository.findMemberByUsername(username);
+        Optional<Member> found = memberDetailRepository.findMemberByUsernameOpt(username);
         MemberDetailsImpl memberDetails = found.map(MemberDetailsImpl::new)
                 .orElseThrow(()-> new UsernameNotFoundException("User not found " + username));
         if(!passwordEncoder.matches(password, memberDetails.getPassword())){
@@ -104,6 +118,14 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
         }
 
     }
+    public boolean isTokenExpired(String token){
+            return jwtAuthenticationProvider.isTokenExpired(token);
+    }
 
+    public String findByIdOfNickname(Integer memberId) {
+        String nickname = memberDetailRepository.findById(memberId);
 
+        System.out.println(nickname);
+        return nickname;
+    }
 }

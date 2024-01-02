@@ -1,6 +1,7 @@
 package com.example.rest_react_practice.Filter;
 
 
+import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,11 +15,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println(jwtTokenProvider);
+        System.out.println(jwtAuthenticationProvider);
         filterChain.doFilter(request, response);
     }
 }

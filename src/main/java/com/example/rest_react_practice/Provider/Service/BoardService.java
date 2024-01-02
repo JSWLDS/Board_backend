@@ -36,7 +36,7 @@ public class BoardService {
                             .typeNo(boardPostsEntity.getTypeNo())
                             .title(boardPostsEntity.getTitle())
                             .contents(boardPostsEntity.getContents())
-                            .userId(boardPostsEntity.getMemberId())
+                            .memberId(boardPostsEntity.getMemberId())
                             .createdTime(boardPostsEntity.getCreatedTime())
                             .updatedTime(boardPostsEntity.getUpdatedTime())
                             .counts(boardPostsEntity.getCounts())
@@ -54,6 +54,8 @@ public class BoardService {
         BoardPosts board_posts = boardRepository.findById(boardId).orElseThrow(()-> new ResourceNotFoundException("Not exits Board Data by no : ["+ boardId +"]"));
         return ResponseEntity.ok(board_posts);
     }
+
+
     
     //조회수 증가
     public String updateCount(Integer boardId) {

@@ -22,7 +22,7 @@ public class JwtAuthenticationProvider {
     private static final int DAY = 24 * HOUR;
 
     // JWT 토큰의 유효기간: 3일 (단위: seconds)
-    private static final int JWT_TOKEN_VALID_SEC = VALID_DAY * DAY;
+    private static final int JWT_TOKEN_VALID_SEC = VALID_DAY * DAY * 1000;
     // JWT 토큰의 유효기간: 3일 (단위: milliseconds)
 
     // 테스트용으로 토큰 유효기간을 1분으로 설정.
@@ -42,7 +42,7 @@ public class JwtAuthenticationProvider {
                 .claim("authorities", roles)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_SEC))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -75,7 +75,8 @@ public class JwtAuthenticationProvider {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

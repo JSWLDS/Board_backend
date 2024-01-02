@@ -2,7 +2,7 @@ package com.example.rest_react_practice.Config.Security;
 
 
 import com.example.rest_react_practice.Filter.JwtAuthenticationFilter;
-import com.example.rest_react_practice.Filter.JwtTokenProvider;
+import com.example.rest_react_practice.Provider.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,15 +25,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors().and().csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/board/**")).hasRole("USER")
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1//board/type/**")).hasRole("USER")
 
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/user/**")).authenticated()
 //                        .requestMatchers(new AntPathRequestMatcher("/auth/admin/**")).hasAuthority("ADMIN")
@@ -42,7 +40,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

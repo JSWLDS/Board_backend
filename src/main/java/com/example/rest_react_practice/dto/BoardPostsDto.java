@@ -18,7 +18,7 @@ public class BoardPostsDto {
 
     private String contents;
 
-    private Long userId;
+    private Long memberId;
 
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime  createdTime;
